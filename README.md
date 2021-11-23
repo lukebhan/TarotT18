@@ -13,7 +13,7 @@ The battery model is courtesy of Nasa prognostics library available ![here](http
 
 ## Model Diagram
 Quick diagram of the model
-![modelDiagram][./simulDiagram.png]
+![modelDiagram](./simulDiagram.png)
 
 # Contact
 If there are any issues with the library, please leave a comment on Github or feel free to send me an email at luke.bhan@vanderbilt.edu
