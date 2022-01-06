@@ -5,6 +5,14 @@ This is an implemntation of the Tarot T18 completely in python. It uses a scipy 
 # Usage 
 An example setup of running an entire simulation is given in `examples/simul.py`. From here, the output trajectory as well as battery degredation can be visualized using `examples/plotTraj.py`
 
+## Requirements
+These can be installed individually or using `pip install numpy matplotlib pandas scipy PyQt5` or by running the `.bat`/`.sh` scripts.
+* numpy
+* matplotlib
+* PyQt5
+* pandas
+* scipy
+
 ## Building Trajectories
 Trajectories are built in terms of coupled csv files for x, y, and z where the first column represnts the time and the second column the ref position in either x, y, or z. See `example/simul.py` for a simple example on how trajectories are loaded into a python list. It is worht noting in this simulation, we do not consider take off and landing and thus the angular velocity of the motors are started at 365 rad/sec. This can easily be changed in `src/motor/motor.py` line 21. 
 
