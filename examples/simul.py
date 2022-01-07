@@ -39,7 +39,7 @@ AttitudeControllerParams = {"kdphi": 1, "kpphi": 3, "kdpsi": 1, "kppsi": 3, "kdt
 attitudeController = AttitudeController(AttitudeControllerParams)
 
 # Build Trajectories. Currently have 3 
-traj = "e"
+traj = "zig"
 if traj == '8':
     xrefarr = pd.read_csv("paths/xref8traj.csv", header=None).iloc[:, 1]
     yrefarr = pd.read_csv("paths/yref8traj.csv", header=None).iloc[:, 1]
@@ -58,36 +58,48 @@ psiRef = 0
 # time is in 1/100 of second
 arr1 = []
 arr2 = []
+# Set the initial starting point (x & y) equal to the points from the ref arrays
 xref = xrefarr[0]
 yref = yrefarr[0]
-np.savetxt('xref', xrefarr)
-np.savetxt('yref', yrefarr)
+# Store the reference trajectories
+np.savetxt(f'xref', xrefarr)
+np.savetxt(f'yref', yrefarr)
+# Get initial state of the drone
 state = tarot.getState()
 count = 0
+
+# Loop while there is still a waypoint in xref
 while count != len(xrefarr)-1:
+    # Get error/offset of current pos to ref pos
     error = math.sqrt((xref-state[0])*(xref-state[0]) + (yref-state[1]) * (yref-state[1]) + (zref-state[2]) * (zref-state[2]))
+    # lower bound on error?
     if error < 0.5:
         count += 1
         xref = xrefarr[count]
         yref = yrefarr[count]
+    # Add T18 position as the state
     arr1.append(state[0])
     arr2.append(state[1])
+    # Get the ref voltages using the alt, att and pos controllers
     fz = altitudeController.output(state, zref)
     thetaRef, phiRef = positionController.output(state, [xref, yref])
     roll, pitch, yaw = attitudeController.output(state, [phiRef, thetaRef, psiRef]) 
     uDesired = [fz, roll, pitch, yaw]
     refVoltage = allocator.getRefVoltage(uDesired)
-    # iterate over each motor
+    # iterate over each motor (8 on the T18) and update total current
     rpm = np.zeros(8, dtype=np.float32)
     totalCurrent = 0
     for idx, motor in enumerate(motorArray):
         rpm[idx], current  = motor.getAngularSpeed(refVoltage[idx])
         totalCurrent +=  current
+    # step the battery with the current
     bat.step({"i": totalCurrent})
+    # Update the state using the rpm array
     state = tarot.update(rpm)
     # Add noise 
     if i  % 100 == 0:
         state[0] += np.random.normal(0, 0.1)
         state[1] += np.random.normal(0, 0.1)
+# Save the x and y arrays
 np.savetxt('x', arr1)
 np.savetxt('y', arr2)
