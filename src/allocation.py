@@ -35,9 +35,9 @@ class Allocator:
 
     def getRefVoltage(self, uDesired):
         # first constrain omega.
-        omegaS = self.AFinv.dot(uDesired) 
+        voltageS = self.AFinv.dot(uDesired) 
         vref = np.zeros(8)
-        for idx, val in enumerate(omegaS):
+        for idx, val in enumerate(voltageS):
             if val < 0:
                 vref[idx] = 0
             elif val > self.maxSpeedSquare:
