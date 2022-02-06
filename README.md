@@ -5,7 +5,7 @@ This is an implemntation of the Tarot T18 completely in python. It uses a scipy 
 # Usage 
 An example setup of running an entire simulation is given in `examples/simul.py`. From here, the output trajectory as well as battery degredation can be visualized using `examples/plotTraj.py`
 
-An example simulation can be run using ``python .\t18simulation.py -f "paths/p1.csv" -i "test"
+An example simulation can be run using ``python .\t18simulation.py -f "paths/p1.csv" -i "test"``
 
 ### Argument tage
 - ``--file``, ``-f``: Path to the input file
