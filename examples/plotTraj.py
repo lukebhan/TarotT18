@@ -16,7 +16,7 @@ plt.show()
 
 bat1 = np.loadtxt("battery.txt")
 
-plt.plot(bat1, label="Battery 1")
+plt.plot(np.log(bat1), label="Log Battery 1")
 plt.legend()
 plt.savefig("battery.png")
 plt.show()
