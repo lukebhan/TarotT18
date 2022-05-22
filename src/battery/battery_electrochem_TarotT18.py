@@ -321,7 +321,13 @@ class BatteryElectroChemEOD(PrognosticsModel):
             An[11]*(xnS2_minus_1**12 - (22*xnS*one_minus_xnS)*xnS2_minus_1**10)/F,  #Ven11
             An[12]*(xnS2_minus_1**13 - (24*xnS*one_minus_xnS)*xnS2_minus_1**11)/F   #Ven12
         ]
-        Ven = params['U0n'] + R*x['tb']/F*log(one_minus_xnS/xnS) + sum(VenParts)
+        
+        try:
+            Ven = params['U0n'] + R*x['tb']/F*log(one_minus_xnS/xnS) + sum(VenParts)
+        except:
+            print(params['U0n'], R*x['tb'], F, sum(VenParts), one_minus_xnS,xnS)
+            print(one_minus_xnS/xnS)
+            print(log(one_minus_xnS/xnS))
 
         # Positive Surface
         Ap = params['Ap']
