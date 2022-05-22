@@ -3,15 +3,20 @@ from geographiclib.geodesic import Geodesic
 import math
 import matplotlib.pyplot as plt
 import pandas as pd
+from weathersrc.interpolator import interpolate
 
 path = "examples/paths/"
 name = "TEST"
 
 def fromlatlon(route, sample=3):
-    # In the form [[x1,x2,...],[y1,y2,...]]
+    unfiltered = np.genfromtxt("weathersrc/weatherout/p1.csv", delimiter=' ')
+    weather = [np.array([unfiltered[0,0], unfiltered[0,1], 0])]
     coords = [[0,0]]
-
+    print(len(route), len(unfiltered))
     for i in range(1,len(route)):
+        e = unfiltered[i]
+        s = unfiltered[i-1]
+
         t = Geodesic.WGS84.Inverse(route[i-1,0],route[i-1,1], route[i,0], route[i,1])
 
         dist = t['s12']
@@ -19,22 +24,30 @@ def fromlatlon(route, sample=3):
 
         ox,oy = coords[-1][0],coords[-1][1]
 
+        ex = ox+((dist*2)*math.cos(math.radians(heading)))
+        ey = oy+((dist*2)*math.sin(math.radians(heading)))
+
+        print(ex, ey)
+
         for j in range(1,(int(dist/sample)+1)):
             v = j
 
             if v > dist:
                 v=dist
-            x = ox+((j*2)*math.cos(math.radians(heading)))
-            y = oy+((j*2)*math.sin(math.radians(heading)))
+            x = ox+((v*2)*math.cos(math.radians(heading)))
+            y = oy+((v*2)*math.sin(math.radians(heading)))
             coords.append([x,y])
 
-        
+            weather.append(interpolate(x,y,ox,oy,ex,ey,s,e))
+
+
 
     coords = np.array(coords)
     x = coords[:,0]
     y = coords[:,1]
 
-    return (coords)
+    print(weather)
+    return coords, weather
 
     # df = pd.DataFrame(data=x)
     # df.index = np.arange(1,len(df)+1)
@@ -45,10 +58,3 @@ def fromlatlon(route, sample=3):
 
     # plt.plot(coords[:,0],coords[:,1])
     # plt.show()
-
-
-fromlatlon(np.array([[53.61031,-2.10288],[53.6098,-2.10365],[53.60966,-2.10428],
-[53.60953,-2.10440],[53.60853,-2.10389],[53.60862,-2.10321],[53.60826,-2.10239],
-[53.60900,-2.10116],[53.60931,-2.10022],[53.60952,-2.10042],[53.60906,-2.10216],
-[53.60903,-2.10362],[53.60927,-2.10373],[53.60947,-2.10268],[53.60965,-2.10215],
-[53.60984,-2.10216],[53.61031,-2.10288]]))
