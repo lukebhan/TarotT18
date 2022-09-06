@@ -23,6 +23,12 @@ class AttitudeController(Controller):
     # The current State objects is the Ocotorotrs current state consisting of Pos, Vel, Angle, AngleVel in 3 different directions each. 
     # The targetValue is the desired angularVelocity
     def output(self, currentState, targetValue):
+        pos = (currentState[0],currentState[1],currentState[2])
+        vel = (currentState[3],currentState[4],currentState[5])
+        angle = (currentState[6],currentState[7],currentState[8])
+        anglevel = (currentState[9],currentState[10],currentState[11])
+        # print([pos,vel,angle,anglevel])
+
         roll = -1*(currentState[6]*self.kdphi+self.kpphi*(currentState[9]-targetValue[0]))
         pitch = -1*(currentState[7]*self.kdtheta+self.kptheta*(currentState[10]-targetValue[1]))
         yaw = -1*(currentState[8]*self.kdpsi+self.kppsi*(currentState[11]-targetValue[2]))

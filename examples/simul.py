@@ -39,7 +39,7 @@ AttitudeControllerParams = {"kdphi": 1, "kpphi": 3, "kdpsi": 1, "kppsi": 3, "kdt
 attitudeController = AttitudeController(AttitudeControllerParams)
 
 # Build Trajectories. Currently have 3 
-traj = "e"
+traj = "TEST"
 if traj == '8':
     xrefarr = pd.read_csv("paths/xref8traj.csv", header=None).iloc[:, 1]
     yrefarr = pd.read_csv("paths/yref8traj.csv", header=None).iloc[:, 1]
@@ -49,6 +49,9 @@ elif traj == 'e':
 elif traj == "zig":
     yrefarr = pd.read_csv("paths/yrefZigtraj.csv", header=None).iloc[:, 1]
     xrefarr = pd.read_csv("paths/xrefZigtraj.csv", header=None).iloc[:, 1]
+elif traj == "TEST":
+    yrefarr = pd.read_csv("paths/TESTy.csv", header=None).iloc[:, 1]
+    xrefarr = pd.read_csv("paths/TESTx.csv", header=None).iloc[:, 1]
 
 zref = 3
 # Psi ref = 0

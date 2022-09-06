@@ -1,0 +1,7 @@
+# General Requirements #
+numpy
+matplotlib
+PyQt5
+pandas
+scipy
+geographiclib
